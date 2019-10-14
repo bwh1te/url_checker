@@ -11,7 +11,7 @@ parser.add_argument(
     help="TCP/IP hostname to serve on (default: %(default)r)",
 )
 parser.add_argument(
-    "-p",
+    "-P",
     "--port",
     type=int,
     default=8080,
