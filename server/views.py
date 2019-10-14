@@ -104,3 +104,21 @@ async def chunked(request):
         await response.write(b'\r\n')
     await response.write_eof()
     return response
+
+
+def redirect_cycle(request):
+    redirect_rules = {
+        'a': 'b',
+        'b': 'c',
+        'c': 'd',
+        'd': 'a',
+    }
+    current_page_id = request.match_info['id']
+    status, reason = get_random_redirect()
+    return web.Response(
+        status=status,
+        reason=reason,
+        headers={
+            'Location': f'/redirect_cycle/{redirect_rules[current_page_id]}'
+        }
+    )
