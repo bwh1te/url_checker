@@ -1,9 +1,16 @@
 import logging
 import sys
-from random import choice
+from random import choice, choices
+from string import ascii_letters
+
+from asyncio import sleep
 
 import aiohttp
 from aiohttp import web
+
+TOTAL_CHUNK_COUNT = 1000
+CHUNK_SIZE_BYTES = 1024
+SECONDS_BETWEEN_CHUNKS = 1
 
 
 def get_random_redirect():
@@ -79,3 +86,21 @@ async def bad_size(request):
         },
         text='Your browser think it is 42 bytes length. But it is not.'
     )
+
+
+async def chunked(request):
+    response = web.StreamResponse(
+        headers={
+            'Content-Type': 'text/html'
+        }
+    )
+
+    await response.prepare(request)
+    for _ in range(TOTAL_CHUNK_COUNT):
+        await sleep(SECONDS_BETWEEN_CHUNKS)
+        await response.write(
+            ''.join(choices(ascii_letters, k=CHUNK_SIZE_BYTES)).encode('utf-8')
+        )
+        await response.write(b'\r\n')
+    await response.write_eof()
+    return response
