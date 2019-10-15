@@ -3,10 +3,9 @@ import sys
 from random import choice, choices
 from string import ascii_letters
 
-from asyncio import sleep
-
 import aiohttp
 from aiohttp import web
+from asyncio import sleep
 
 TOTAL_CHUNK_COUNT = 1000
 CHUNK_SIZE_BYTES = 1024

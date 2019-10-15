@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from server.views import (
+from test_server.views import (
     bad_size,
     chunked,
     index,

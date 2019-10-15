@@ -1,6 +1,6 @@
 import argparse
 
-from server.main import main
+from test_server.main import main
 
 
 parser = argparse.ArgumentParser(description="Run a simple HTTP server")
