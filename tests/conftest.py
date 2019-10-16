@@ -4,11 +4,6 @@ import time
 import pytest
 
 from resource_checker.simple_checker.resource_checkers import SessionBasedResourceChecker
-from resource_checker.simple_checker.requesters import SessionBasedHeadRequester
-from resource_checker.simple_checker.response_validators import (
-    HasContentLengthHeader,
-    NoChunkedHeader,
-)
 
 TEST_SERVER_HOST = 'localhost'
 TEST_SERVER_PORT = '8080'
@@ -37,8 +32,5 @@ def session_based_resource_checker():
     """
     Creates SessionBasedResourceChecker instance and starts context for it.
     """
-    with SessionBasedResourceChecker(
-        head_requester=SessionBasedHeadRequester,
-        head_validators=[HasContentLengthHeader, NoChunkedHeader]
-    ) as checker:
+    with SessionBasedResourceChecker() as checker:
         yield checker

@@ -26,9 +26,13 @@ class SessionBasedHeadRequester(SessionBasedRequesterBase):
             raise RequesterConfigurationError('Improper configuration: you should set '
                                               'session first')
         try:
-            with self._session.head(url, allow_redirects=True) as resp:
+            with self._session.head(
+                url,
+                allow_redirects=True,
+                headers={'Connection': 'close'}
+            ) as resp:
                 return resp
-        except TooManyRedirects as e:
+        except TooManyRedirects:
             # Notice that maximum number of possible redirects are set outside,
             # as the incoming request.Session() object option `max_redirects`.
-            raise RequesterProcessingFailure('Exceeded maximum redirect count')
+            raise RequesterProcessingFailure(f'{url} Exceeded maximum redirect count')

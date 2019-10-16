@@ -5,6 +5,7 @@ Exception hierarchy:
 
     ResourceCheckerError
         ResourceCheckerConfigurationError
+        ResourceCheckerValidationFailure
 
     RequesterError
         RequesterConfigurationError
@@ -27,6 +28,13 @@ class ResourceCheckerError(Exception):
 class ResourceCheckerConfigurationError(ResourceCheckerError):
     """
     Raises in case of ResourceCheckerBase successor improper configuration.
+    """
+    pass
+
+
+class ResourceCheckerValidationFailure(ResourceCheckerError):
+    """
+    Raises if resource validation was failed.
     """
     pass
 

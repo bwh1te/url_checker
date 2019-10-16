@@ -11,6 +11,6 @@ class RequesterBase(ABC):
         Makes request to `url`. Any additional settings should be set whilst obj initiation.
         :param url: URL to request
         :return: response object
-        :raises: RequesterConfigurationError, RequesterProcessingFailure
+        :raises: RequesterError
         """
         raise NotImplementedError
