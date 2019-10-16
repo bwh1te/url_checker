@@ -30,4 +30,7 @@ python -m test_server -H localhost -P 8080
 
 ## Use
 
-Here will be the manual for a CLI tool.
+```bash
+python url_checker.py http://github.com
+```
+Writes final document destination to `stdout` if given url could be retrieved. Or writes the reason why it could not be retrieved to `stderr`.
