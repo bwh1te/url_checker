@@ -45,6 +45,8 @@ def test_resource_checker_call_valid(run_local_server,
     '/redirect_cycle/a',
     '/chunked',
     '/404_not_found',
+    '/good_one?redirectUrl=http://evilsite.com',
+    '/good_one?redirect=https://secureevilsite.com',
 ])
 def test_resource_checker_call_invalid(run_local_server,
                                        session_based_resource_checker,

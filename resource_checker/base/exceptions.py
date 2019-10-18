@@ -15,6 +15,8 @@ Exception hierarchy:
         UnexpectedResponse
         ResponseValidationFailure
 
+    UrlValidationFailure
+
 """
 
 
@@ -77,5 +79,12 @@ class UnexpectedResponse(ResponseValidatorError):
 class ResponseValidationFailure(ResponseValidatorError):
     """
     Raises if Response didn't pass validation.
+    """
+    pass
+
+
+class UrlValidationFailure(Exception):
+    """
+    Raises in case of bad url
     """
     pass

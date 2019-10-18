@@ -1,9 +1,10 @@
-from typing import Optional, Sequence, Type
+from typing import Callable, Optional, Sequence, Type
 
 import requests
 
 from resource_checker.base.exceptions import ResourceCheckerConfigurationError
 from resource_checker.base.resource_checkers import ResourceCheckerBase
+from resource_checker.base.url_validators import has_no_redirects
 
 from .requesters import SessionBasedHeadRequester
 from .response_validators import (
@@ -20,10 +21,14 @@ class SessionBasedResourceChecker(ResourceCheckerBase):
     """
 
     def __init__(self,
+                 url_validators: Sequence[Callable[[str], bool]] = None,
                  head_requester: Type[SessionBasedHeadRequester] = None,
                  head_validators: Sequence[Type[SimpleHeadResponseValidatorBase]] = None):
 
         # Set default requester and validators if custom are not provided
+        url_validators = url_validators or [
+            has_no_redirects,
+        ]
         head_requester = head_requester or SessionBasedHeadRequester
         head_validators = head_validators or [
             HttpStatusIsOk,
@@ -31,7 +36,7 @@ class SessionBasedResourceChecker(ResourceCheckerBase):
             NoChunkedHeader,
         ]
 
-        super().__init__(head_requester, head_validators)
+        super().__init__(url_validators, head_requester, head_validators)
         self._session = None
 
     def __enter__(self):

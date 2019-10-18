@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Type
+from typing import Callable, Optional, Sequence, Type
 
 from resource_checker.base.exceptions import (
     RequesterProcessingFailure,
     ResourceCheckerValidationFailure,
     ResponseValidationFailure,
+    UrlValidationFailure,
 )
 
 from .response_validators import HeadResponseValidatorBase
@@ -22,8 +23,10 @@ class ResourceCheckerBase(ABC):
     """
 
     def __init__(self,
+                 url_validators: Sequence[Callable[[str], None]],
                  head_requester: Type[RequesterBase],
                  head_validators: Sequence[Type[HeadResponseValidatorBase]]):
+        self._url_validators = url_validators
         self._head_requester = head_requester()
         self._head_validators = [c() for c in head_validators]
 
@@ -35,6 +38,14 @@ class ResourceCheckerBase(ABC):
         :return: final resource location after all redirects
         :raises: ResourceCheckerError
         """
+
+        # Checking the url string before trying to make requests
+        for url_validator_func in self._url_validators:
+            try:
+                url_validator_func(url)
+            except UrlValidationFailure as e:
+                raise ResourceCheckerValidationFailure(str(e))
+
         try:
             head_response = self._head_requester.make_request(url)
         except RequesterProcessingFailure as e:
